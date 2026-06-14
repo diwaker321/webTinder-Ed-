@@ -4,8 +4,12 @@ const connectDB = require("./config/database");
 const User = require("./models/user")
 const {validate} = require("./utils/validate")
 const bcrypt = require('bcrypt');
+const cookieParcer = require('cookie-parser')
+const jwt= require('jsonwebtoken')
 
 app.use(express.json())
+app.use(cookieParcer())
+
 
 
 //signup your user with user info
@@ -36,6 +40,74 @@ app.post("/signup" , async (req,res)=>{
   }
 
 })
+
+
+//check the user value
+app.post ("/login" , async (req,res)=>{
+  try{
+    const {emailID , password} = req.body;
+
+    const user = await User.findOne({emailID})
+    if(!user){
+      throw new Error("This account is not present in our Database please check and try again later")
+    }
+
+    const isLogin = await bcrypt.compare(password, user.password);
+
+    if(!isLogin){
+
+      throw new Error("password has been incorrect")
+
+    }else{
+
+      //making a jwt token
+
+      const token = await jwt.sign({_id:user._id} , 'Common@123')
+
+      //sending the jwt token to browser cookie
+      res.cookie('token' , token)
+      res.send("Login Has Been Successfull")
+    }
+
+  }catch(err){
+    console.log('err: ', err);
+
+  }
+})
+
+
+//get the profile of user
+
+app.get("/profile" , async (req,res)=>{
+
+  try{
+
+    //getting the token from the browser
+  const cookies = req.cookies;
+  const { token} = cookies
+
+  if(token){
+    //verify the jwt token 
+    const deodedmsg =await jwt.verify(token , 'Common@123')
+  
+  
+    const user = await  User.findById({_id : deodedmsg._id})
+    console.log('user: ', user);
+    res.send(user)
+  }else{
+    throw new Error("Session time out please login first")
+  }
+
+
+  }catch(err){
+    console.log('err: ', err);
+
+
+  }
+
+  
+})
+
 
 
 //get the data by of user jo apni mail id likhega ..
