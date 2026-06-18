@@ -6,7 +6,7 @@ const { validate } = require("./utils/validate");
 const bcrypt = require("bcrypt");
 const cookieParcer = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const { jwtAuth } = require("./Auth/jwtAuth");
+const userAuth = require("./Auth/userAuth");
 
 app.use(express.json());
 app.use(cookieParcer());
@@ -47,8 +47,8 @@ app.post("/login", async (req, res) => {
       if(!isLogin) throw new Error('Invalid Credencials , please check')
 
         //make a jwt token
-        const token = jwt.sign({_id : user._id} , 'Common@123')
-        res.cookie('token' , token)
+        const token = jwt.sign({_id : user._id} , 'Common@123' , { expiresIn: '1h' })
+        res.cookie('token' , token , {expires:'1h'})
       res.send(user);
     }
   } catch (err) {
@@ -57,20 +57,24 @@ app.post("/login", async (req, res) => {
 });
 
 //get the profile of user
-app.get("/profile" , async(req,res)=>{
+app.get("/profile" , userAuth , async(req,res)=>{
   try{
-    const {token} = req.cookies
-
-    if(!token) throw new Error('Token is not valid please log in again')
-    const decodemsg = jwt.verify(token , 'Common@123')
-    const {_id} = decodemsg
-    const user = await User.findById({_id})
+    const user = req.user
     res.send(user)
-
   }catch(err){
     console.log('err: ', err);
   }
 })
+
+
+//send the connection request using this api 
+
+app.post("/connectionRequest" , userAuth ,  (req,res)=>{
+  const user = req.user
+  res.send(`${user.firstname} send you the Connection Request`)
+})
+
+
 
 connectDB()
   .then((res) => {
