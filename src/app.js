@@ -39,7 +39,6 @@ app.post("/login", async (req, res) => {
     const { emailID, password } = req.body;
 
     const user = await User.findOne({ emailID });
-    console.log("user: ", user);
     if (!user) {
       throw new Error("User is not found please check");
     } else {
@@ -47,8 +46,8 @@ app.post("/login", async (req, res) => {
       if(!isLogin) throw new Error('Invalid Credencials , please check')
 
         //make a jwt token
-        const token = jwt.sign({_id : user._id} , 'Common@123' , { expiresIn: '1h' })
-        res.cookie('token' , token , {expires:'1h'})
+        const token = await user.getJWT()
+        res.cookie('token' , token)
       res.send(user);
     }
   } catch (err) {
