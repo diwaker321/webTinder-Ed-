@@ -14,4 +14,18 @@ const validate = (req)=>{
     }
 }
 
-module.exports = {validate}
+const validateEditValues = (req)=>{
+    const editValues = ["firstname" , "lastname" , "skills" , "age"]
+
+    const isInclude =  Object.keys(req.body).every(res=>editValues.includes(res))
+    return isInclude;
+
+}
+
+// const validateEditValues = (req)=>{
+//     const validValues = [firstname , lastname, age, gender , skills]
+//     const isvalid =  Object.keys(req.body).every(key =>validValues.includes(key))
+//     return isvalid;
+// }
+
+module.exports = {validate , validateEditValues }

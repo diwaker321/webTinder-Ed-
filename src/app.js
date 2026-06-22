@@ -7,13 +7,6 @@ const profileRouter = require("./routes/profile")
 const connectionRouter = require("./routes/connection")
 
 
-
-
-// const User = require("./models/user");
-// const { validate } = require("./utils/validate");
-// const jwt = require("jsonwebtoken");
-// const userAuth = require("./Auth/userAuth");
-
 app.use(express.json());
 app.use(cookieParcer());
 
