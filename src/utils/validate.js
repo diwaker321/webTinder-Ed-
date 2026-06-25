@@ -15,7 +15,7 @@ const validate = (req)=>{
 }
 
 const validateEditValues = (req)=>{
-    const editValues = ["firstname" , "lastname" , "skills" , "age"]
+    const editValues = ["firstname" , "lastname" , "skills" , "age" , "gender"]
 
     const isInclude =  Object.keys(req.body).every(res=>editValues.includes(res))
     return isInclude;

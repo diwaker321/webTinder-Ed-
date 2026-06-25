@@ -109,7 +109,7 @@ connectionRouter.post("/request/review/:status/:requestId" , userAuth , async (r
     if(!reviewRequest){
       return res.status(400).send("Connection request not found")
     }
-    reviewRequest.status='accepted'
+    reviewRequest.status=status
 
     const data = await reviewRequest.save()
 
