@@ -51,7 +51,7 @@ userRouter.get("/user/feed" , userAuth , async (req,res)=>{
 
     const feedUsers = await Usermodel.find({
         _id:{ $nin:[...notallowedUsers]}
-    }).select("firstname lastname emailID")
+    }).select("firstname lastname emailID photoURL about")
     // console.log('feedUsers: ', feedUsers);
     res.send(feedUsers)
 })

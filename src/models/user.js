@@ -36,6 +36,17 @@ const userSchema = mongoose.Schema(
     skills: {
       type: [String],
     },
+
+    photoURL:{
+      type:String,
+      default:null
+    },
+    about:{
+      type:String,
+      default:"Hello there i am using Web tinder",
+      maxlength:200,
+      trim:true,
+    }
   },
   { timestamps: true },
 );
