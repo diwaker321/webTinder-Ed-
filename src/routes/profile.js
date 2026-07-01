@@ -17,7 +17,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     const isValid = validateEditValues(req);
     if (isValid) {
       let loginUser = req.user;
-      console.log(loginUser);
+      // console.log(loginUser);
 
       Object.keys(req.body).forEach((res) => (loginUser[res] = req.body[res]));
       await loginUser.save();
@@ -25,8 +25,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
       // res.send(loginUser)
       res.json({ message: "Your feilds have been updates Successfully" , data:loginUser });
     } else {
-      res.status(400).send("Invalid Edit Please Check");
-      throw new Error("Invalid Edit Please Check");
+     return res.status(400).send("Invalid Edit Please Check");
     }
   } catch (err) {
     console.log("err: ", err);

@@ -15,12 +15,16 @@ authRouter.post("/signup", async (req, res) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       emailID: req.body.emailID,
-      gender: req.body.gender,
       password: haspassword,
+      about:req.body.about,
+      skills:req.body.skills,
+      age:req.body.age,
+      gender: req.body.gender,
     });
 
     await newUser.save();
-    res.send("user has signed up");
+    res.json({message:"user has signed up" , data:newUser})
+    // res.send("user has signed up" , newUser);
   } catch (err) {
     console.log("err: ", err);
   }
